@@ -1,5 +1,6 @@
 ﻿using Library.API.Entities;
 using Library.API.Helpers;
+using Library.API.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,12 @@ namespace Library.API.Services
     public class LibraryRepository : ILibraryRepository
     {
         private LibraryContext _context;
+        private readonly IPropertyMappingService _propertyMappingService;
 
-        public LibraryRepository(LibraryContext context)
+        public LibraryRepository(LibraryContext context, IPropertyMappingService propertyMappingService)
         {
             _context = context;
+            _propertyMappingService = propertyMappingService;
         }
 
         public void AddAuthor(Author author)
@@ -67,11 +70,14 @@ namespace Library.API.Services
 
         public PageList<Author> GetAuthors(AuthorsResourceParameters authorResourceParameters)
         {
-            var collectionBeforePagging = _context.Authors
-                .OrderBy(a => a.FirstName)
-                .ThenBy(a => a.LastName)
-                .AsQueryable();
+            //var collectionBeforePagging = _context.Authors
+            //    .OrderBy(a => a.FirstName)
+            //    .ThenBy(a => a.LastName)
+            //    .AsQueryable();
 
+            var collectionBeforePagging = _context.Authors
+                .ApplySort(authorResourceParameters.OrderBy, _propertyMappingService.GetPropertyMapping<AuthorDto, Author>());
+                
             if (!string.IsNullOrWhiteSpace(authorResourceParameters.Genre))
             {
                 var genre = authorResourceParameters.Genre.Trim();
