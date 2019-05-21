@@ -38,7 +38,25 @@ namespace Library.API
             {
                 setupAction.ReturnHttpNotAcceptable = true;
                 setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
-                setupAction.InputFormatters.Add(new XmlDataContractSerializerInputFormatter());
+                //setupAction.InputFormatters.Add(new XmlDataContractSerializerInputFormatter());
+
+                var xmlDataContractSerializerInputFormatter = new XmlDataContractSerializerInputFormatter();
+                xmlDataContractSerializerInputFormatter.SupportedMediaTypes.Add("application/vnd.parvulescu.authorwithdateofdeath.full+xml");
+                xmlDataContractSerializerInputFormatter.SupportedMediaTypes.Add("application/vnd.parvulescu.author.full+xml");
+                setupAction.InputFormatters.Add(xmlDataContractSerializerInputFormatter);
+
+                var jsonInputFormatter = setupAction.InputFormatters.OfType<JsonInputFormatter>().FirstOrDefault();
+                if (jsonInputFormatter != null)
+                {
+                    jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.parvulescu.author.full+json");
+                    jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.parvulescu.authorwithdateofdeath.full+json");
+                }
+
+                var jsonOutputFormatter = setupAction.OutputFormatters.OfType<JsonOutputFormatter>().FirstOrDefault();
+                if (jsonOutputFormatter != null)
+                {
+                    jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.parvulescu.hateoas+json");
+                }
             })
             .AddJsonOptions(setupAction =>
                 setupAction.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver()
@@ -96,8 +114,9 @@ namespace Library.API
             {
                 cfg.CreateMap<Entities.Author, Models.AuthorDto>()
                     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
-                    .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.DateOfBirth.GetCurrentAge()));
+                    .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.DateOfBirth.GetCurrentAge(null)));
                 cfg.CreateMap<Models.AuthorForCreationDto, Entities.Author>();
+                cfg.CreateMap<Models.AuthorForCreationWithDateOfDeathDto, Entities.Author>();
 
                 cfg.CreateMap<Entities.Book, Models.BookDto>();
                 cfg.CreateMap<Models.BookForCreationDto, Entities.Book>();
