@@ -35,7 +35,7 @@ namespace Library.API.Entities
                          {
                              Id = new Guid("a3749477-f823-4124-aa4a-fc9ad5e79cd6"),
                              Title = "Misery",
-                             Description = "Misery is a 1987 psychological horror novel by Stephen King. This novel was nominated for the World Fantasy Award for Best Novel in 1988, and was later made into a Hollywood film and an off-Broadway play of the same name."
+                             Description = "Misery is a 1987 psychological horror novel by Stephen King. This novel was nominated for the World Fantasy Award for Best Novel in 1988, and was later made into a Hollywood film and an off-Broadway play of the same name.",
                          },
                          new Book()
                          {
@@ -48,8 +48,8 @@ namespace Library.API.Entities
                              Id = new Guid("60188a2b-2784-4fc4-8df8-8919ff838b0b"),
                              Title = "The Stand",
                              Description = "The Stand is a post-apocalyptic horror/fantasy novel by American author Stephen King. It expands upon the scenario of his earlier short story 'Night Surf' and outlines the total breakdown of society after the accidental release of a strain of influenza that had been modified for biological warfare causes an apocalyptic pandemic which kills off the majority of the world's human population."
-                         }
-                     }
+                         },
+                     },
                 },
                 new Author()
                 {
